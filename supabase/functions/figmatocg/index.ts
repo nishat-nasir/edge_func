@@ -12,21 +12,11 @@ const supabase = createClient(
   Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!,
 );
 
-// Deno.serve(async (req) => {
-//   const { data: res, error } = await supabase.from("projects").select("name")
-//     .limit(1).single();
-
-//   if (error) console.log(error);
-//   const data = {
-//     message: `Hello ${res?.name}!`,
-//   };
-//   console.log(data);
-
-//   return new Response(
-//     JSON.stringify(data),
-//     { headers: { "Content-Type": "application/json" } },
-//   );
-// });
+const corsHeaders = {
+  "Access-Control-Allow-Origin": "*",
+  "Access-Control-Allow-Headers":
+    "authorization, x-client-info, apikey, content-type",
+};
 
 Deno.serve(async (req: any) => {
   const { id, jsonData } = JSON.parse(await req.text());
@@ -44,7 +34,28 @@ Deno.serve(async (req: any) => {
   }
 
   const routes = projectData.routes || [];
-  routes.push(JSON.parse(jsonData));
+
+  if (routes.length > 0 && routes[0].cgCustomComponents) {
+    jsonData.forEach((item: any) => {
+      const newItem = {
+        id: null,
+        name: null,
+        description: null,
+        width: null,
+        height: null,
+        dx: null,
+        dy: null,
+        previewImageUrl: null,
+        createdAt: null,
+        updatedAt: null,
+        childWidgets: [item],
+        isPublic: false,
+      };
+      routes[0].cgCustomComponents.push(newItem);
+    });
+  } else {
+    console.error("Routes array is empty or does not have cgCustomComponents");
+  }
 
   const { data: updatedData } = await supabase.from("projects")
     .update({ routes }).eq("id", id);
@@ -65,6 +76,9 @@ Deno.serve(async (req: any) => {
   console.log(response);
 
   return new Response(JSON.stringify(response), {
-    headers: { "Content-Type": "application/json" },
+    headers: {
+      ...corsHeaders,
+      "Content-Type": "application/json",
+    },
   });
 });
