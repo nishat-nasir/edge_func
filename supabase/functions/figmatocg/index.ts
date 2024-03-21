@@ -18,7 +18,11 @@ const corsHeaders = {
     "authorization, x-client-info, apikey, content-type",
 };
 
-Deno.serve(async (req: any) => {
+Deno.serve(async (req) => {
+  if (req.method === "OPTIONS") {
+    return new Response("ok", { headers: corsHeaders });
+  }
+
   const { id, jsonData } = JSON.parse(await req.text());
 
   const { data: projectData, error } = await supabase.from("projects").select(
@@ -54,7 +58,9 @@ Deno.serve(async (req: any) => {
       routes[0].cgCustomComponents.push(newItem);
     });
   } else {
-    console.error("Routes array is empty or does not have cgCustomComponents");
+    console.error(
+      "Routes array is empty or does not have cgCustomComponents",
+    );
   }
 
   const { data: updatedData } = await supabase.from("projects")
