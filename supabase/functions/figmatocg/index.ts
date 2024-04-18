@@ -55,7 +55,9 @@ Deno.serve(async (req) => {
         childWidgets: [item],
         isPublic: false,
       };
-      routes[0].cgCustomComponents.push(newItem);
+      // routes[0].cgCustomComponents.push(newItem);
+      const routeIndex = routes.length - 1;
+      routes[routeIndex].cgCustomComponents.push(newItem);
     });
   } else {
     console.error(
