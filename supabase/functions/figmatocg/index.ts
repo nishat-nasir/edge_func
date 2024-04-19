@@ -23,7 +23,7 @@ Deno.serve(async (req) => {
     return new Response("ok", { headers: corsHeaders });
   }
 
-  const { id, jsonData } = JSON.parse(await req.text());
+  const { id, pageIndex, jsonData } = JSON.parse(await req.text());
 
   const { data: projectData, error } = await supabase.from("projects").select(
     "routes",
@@ -55,9 +55,8 @@ Deno.serve(async (req) => {
         childWidgets: [item],
         isPublic: false,
       };
-      // routes[0].cgCustomComponents.push(newItem);
-      const routeIndex = routes.length - 1;
-      routes[routeIndex].cgCustomComponents.push(newItem);
+
+      routes[pageIndex].cgCustomComponents.push(newItem);
     });
   } else {
     console.error(
