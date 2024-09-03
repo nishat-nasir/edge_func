@@ -40,6 +40,7 @@ Deno.serve(async (req) => {
     const width = item.options.width ? parseInt(item.options.width) : null;
     const height = item.options.height ? parseInt(item.options.height) : null;
     console.log(item);
+    // ADD if the dx is more than page width then set it to 0
     const { data: componentData, error } = await supabase.from("components")
       .insert([
         {
