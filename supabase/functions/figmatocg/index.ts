@@ -10,8 +10,6 @@ console.log("Hello from Functions!");
 const supabase = createClient(
   Deno.env.get("SUPABASE_URL")!,
   Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!,
-  // "https://ofyngtjccmbxofnztary.supabase.co",
-  // "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im9meW5ndGpjY21ieG9mbnp0YXJ5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3MDI0MzcyMzYsImV4cCI6MjAxODAxMzIzNn0.c3oJ3CENN5hWSpvcB5ev7BJBC2SsqhPB4OTFU39RqYM",
 );
 
 const corsHeaders = {
