@@ -27,22 +27,33 @@ Deno.serve(async (req) => {
     // Check if aiResult contains the result array
     if (aiResult && aiResult.result && Array.isArray(aiResult.result)) {
       // Prepare the insert payload
-      const componentsPayload = aiResult.result.map((component: any) => ({
-        name: component.name,
-        type: component.type,
-        dx: component.dx,
-        dy: component.dy,
-        width: component.width,
-        height: component.height,
-        version: component.version,
-        options: component.options,
-        page_id: page.id,
-        created_at: new Date(),
-        updated_at: new Date(),
-        group_id: component.group_id,
-        is_lib_comp: component.is_lib_comp,
-        index_in_page: component.index_in_page,
-      }));
+      const componentsPayload = aiResult.result.map((component: any) => {
+        // Function to remove null values from an object
+        const cleanOptions = (options: any) => {
+          return Object.fromEntries(
+            Object.entries(options).filter(([_, value]) =>
+              value !== "null" && value !== null
+            ),
+          );
+        };
+
+        return {
+          name: component.name,
+          type: component.type,
+          dx: component.dx,
+          dy: component.dy,
+          width: component.width,
+          height: component.height,
+          version: component.version,
+          options: cleanOptions(component.options), // Clean the options object
+          page_id: page.id,
+          created_at: new Date(),
+          updated_at: new Date(),
+          group_id: component.group_id,
+          is_lib_comp: component.is_lib_comp,
+          index_in_page: component.index_in_page,
+        };
+      });
 
       // Insert components into the Supabase table
       const { data, error: insertError } = await supabase
