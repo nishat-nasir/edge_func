@@ -24,7 +24,6 @@ Deno.serve(async (req) => {
 
     const insertPayload = {
       "edge_func_res": aiResult,
-      // "edge_func_res": jsonDataV2,
     };
 
     const { data, error: insertError } = await supabase
@@ -174,14 +173,14 @@ Deno.serve(async (req) => {
 });
 
 // Function to send JSON data to your API via POST
-async function sendFigmaJsonToApi(jsonString: string) {
+async function sendFigmaJsonToApi(jsonDt: []) {
   const url = "http://121.167.147.128:40121/figma-to-creatego"; // API endpoint
 
   const payload = {
     user_id: "super_dev",
     session_id: "test_session_10389874582",
     request_id: "req_8472657564785628765",
-    figma_json: JSON.parse(jsonString), // Include the JSON string
+    figma_json: jsonDt,
     generation_params: {
       temperature: 0,
       top_p: 0.99,
