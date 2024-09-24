@@ -99,7 +99,7 @@ async function updateComponents(
   try {
     // Check if aiResult contains the result array
     if (aiResult && aiResult.result) {
-      if (Array.isArray(aiResult.result)) {
+      if (Array.isArray(aiResult.result.components)) {
         const componentsPayload = aiResult.result.components.map(
           (component: any) => {
             return {
